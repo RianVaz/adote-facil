@@ -1,0 +1,46 @@
+@startuml DiagramaComponentes
+title Diagrama de Componentes - Adote Fácil
+!theme plain
+
+package "Frontend (Next.js)" {
+	[Aplicação Next.js]
+}
+
+package "Backend - API (Express)" {
+	[Roteador / app.ts]
+	[Controladores]
+	[Serviços]
+	[Repositórios]
+	[Provedores]
+	[Middlewares]
+	[Configurações]
+	[Cliente Prisma]
+}
+
+package "Armazenamento / Externo" {
+	[S3 / Armazenamento de Arquivos]
+}
+
+[Aplicação Next.js] --> [Roteador / app.ts] : HTTP/REST
+[Roteador / app.ts] --> [Controladores] : manipuladores de rota
+[Controladores] --> [Serviços] : lógica de negócio
+[Serviços] --> [Repositórios] : persistência/consultas
+[Serviços] --> [Provedores] : autenticação/criptografia
+[Repositórios] --> [Cliente Prisma] : acesso ao BD
+[Provedores] --> [Cliente Prisma] : configurações opcionais
+[Controladores] --> [Middlewares] : autenticação, multer
+[Serviços] --> [S3 / Armazenamento de Arquivos] : upload de imagens (opcional)
+
+note right of [Controladores]
+	Ex.: controllers/user/*
+end note
+
+note left of [Repositórios]
+	Ex.: repositories/user.ts
+end note
+
+note bottom of [Provedores]
+	Ex.: authenticatorInstance, encrypterInstance
+end note
+
+@enduml
