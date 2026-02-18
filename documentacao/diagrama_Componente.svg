@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
+  <style>
+    .box { fill: #f4f6f8; stroke: #2b6cb0; stroke-width:2 }
+    .text { font-family: Arial, Helvetica, sans-serif; font-size:14px; fill:#111827 }
+    .title { font-weight:700; font-size:18px }
+    .arrow { stroke: #4a5568; stroke-width:2; fill:none; marker-end: url(#arrowhead) }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4a5568" />
+    </marker>
+  </defs>
+
+  <text x="20" y="30" class="title text">Diagrama de Componentes - Adote Fácil</text>
+
+  <!-- Frontend -->
+  <rect x="20" y="60" width="220" height="80" class="box" rx="6"/>
+  <text x="40" y="100" class="text">Frontend (Next.js)</text>
+
+  <!-- Router -->
+  <rect x="300" y="50" width="220" height="100" class="box" rx="6"/>
+  <text x="320" y="90" class="text">Roteador / app.ts</text>
+
+  <!-- Controllers -->
+  <rect x="560" y="40" width="220" height="120" class="box" rx="6"/>
+  <text x="580" y="80" class="text">Controladores</text>
+
+  <!-- Services -->
+  <rect x="820" y="40" width="220" height="120" class="box" rx="6"/>
+  <text x="840" y="80" class="text">Serviços</text>
+
+  <!-- Repositories -->
+  <rect x="560" y="200" width="220" height="100" class="box" rx="6"/>
+  <text x="580" y="240" class="text">Repositórios</text>
+
+  <!-- Providers -->
+  <rect x="820" y="200" width="220" height="100" class="box" rx="6"/>
+  <text x="840" y="240" class="text">Provedores (Auth, Encrypter)</text>
+
+  <!-- Prisma -->
+  <rect x="820" y="340" width="220" height="80" class="box" rx="6"/>
+  <text x="840" y="380" class="text">Cliente Prisma (DB)</text>
+
+  <!-- Storage -->
+  <rect x="300" y="200" width="220" height="100" class="box" rx="6"/>
+  <text x="320" y="240" class="text">Armazenamento (S3)</text>
+
+  <!-- Arrows -->
+  <path d="M240 100 L300 100" class="arrow"/>
+  <path d="M520 100 L560 100" class="arrow"/>
+  <path d="M780 100 L820 100" class="arrow"/>
+  <path d="M680 140 L680 200" class="arrow"/>
+  <path d="M900 140 L900 200" class="arrow"/>
+  <path d="M900 300 L900 340" class="arrow"/>
+  <path d="M680 260 L620 260" class="arrow"/>
+
+  <!-- Notes -->
+  <text x="20" y="520" class="text">Observações: Controladores chamam Serviços; Serviços usam Repositórios e Provedores; Repositórios usam Prisma.</text>
+</svg>

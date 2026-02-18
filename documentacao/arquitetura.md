@@ -22,7 +22,11 @@ app.use(router)
 
 Diagrama de componentes
 - Há um fluxo claro: Frontend (Next.js) <-> Router/Controllers -> Services -> Repositories -> Prisma (DB). Providers (Authenticator, Encrypter) e Middlewares são componentes transversais.
-- Um diagrama PlantUML foi adicionado em `documentacao/diagrama.puml` para visualização gráfica.
+- O diagrama de componentes está embutido abaixo (arquivo gerado: `documentacao/diagrama_Componente.png`).
+
+![Diagrama de Componentes](./diagrama_Componente.png)
+
+O arquivo fonte PlantUML está em `documentacao/diagrama_Componente.puml`.
 
 Notas sobre estilo arquitetural
 - Monolito modular: frontend e backend na mesma repo, separados por contrato HTTP.
