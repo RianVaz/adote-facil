@@ -11,7 +11,7 @@ O projeto adota uma Arquitetura em Camadas, organizada dentro de um Monólito Mo
 - Repositories: Responsáveis pela lógica de persistência e transações diretas com o banco de dados.
 - Services: Camada central que detém a lógica de negócio. Interagem com os repositórios para realizar as operações solicitadas.
 
-### Justificativa (evidências no código)
+### Justificativa
 A decisão de separar o backend do frontend em contêineres separados, permite que o desenvolvimento de ambos ocorra de forma independente, ou seja, facilitando o escalonamento, flexibilidade e o deploy do sistema.
 
 Além disso, na parte do backend, a decisão de utilizar a arquitetura em camadas promove a organização, manutenibilidade e os testes realizados nos códigos, centralizando esse módulo como um monolito.
