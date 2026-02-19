@@ -1,40 +1,22 @@
-## Análise da arquitetura adotada
+# Análise da arquitetura adotada
 
-Resumo curto
-- Tipo: monolito modular (frontend Next.js + backend REST em Node/Express).
-- Estilo: arquitetura em camadas (Presentation -> Controllers -> Services -> Repositories -> Database), com camadas de infra/fornecedores (providers), middlewares e config isolada.
+O projeto adota uma Arquitetura em Camadas, organizada dentro de um Monólito Modular (onde frontend e backend coexistem no mesmo repositório, mas são independentes).
 
-Justificativa (evidências no código)
-- Estrutura de pastas do backend mostra separação por responsabilidade: `controllers/`, `services/`, `repositories/`, `providers/`, `middlewares/`, `config/`.
-- `src/app.ts` monta o servidor Express e registra middlewares e rotas — camada de apresentação (HTTP).
+**Tipo**: monolito modular (frontend Next.js + backend REST em Node/Express).
 
-Exemplo (trecho simplificado de `src/app.ts`):
+**Estilo**: Arquitetura em camadas do backend.
+- Controllers: Atuam nos endpoints do sistema, validando a entrada de dados e delegando o processamento para os serviços apropriados.
+- Middlewares: Interceptam requisições HTTP para realizar validações antes que cheguem aos controllers.
+- Providers: Camada especializada em serviços de infraestrutura, como autenticação e criptografia de dados.
+- Repositories: Responsáveis pela lógica de persistência e transações diretas com o banco de dados.
+- Services: Camada central que detém a lógica de negócio. Interagem com os repositórios para realizar as operações solicitadas.
 
-```ts
-import express from 'express'
-const app = express()
-app.use(express.json())
-app.use(router)
-```
+### Justificativa (evidências no código)
+A decisão de separar o backend do frontend em contêineres separados, permite que o desenvolvimento de ambos ocorra de forma independente, ou seja, facilitando o escalonamento, flexibilidade e o deploy do sistema.
 
-- `src/routes.ts` orquestra rotas e faz ligação entre requests e controllers, aplicando middlewares como autenticação e multer.
-- Repositórios usam Prisma (`src/database.ts` exporta `prisma = new PrismaClient()`), por exemplo `repositories/user.ts` encapsula persistência.
+Além disso, na parte do backend, a decisão de utilizar a arquitetura em camadas promove a organização, manutenibilidade e os testes realizados nos códigos, centralizando esse módulo como um monolito.
 
-Diagrama de componentes
-- Há um fluxo claro: Frontend (Next.js) <-> Router/Controllers -> Services -> Repositories -> Prisma (DB). Providers (Authenticator, Encrypter) e Middlewares são componentes transversais.
-- O diagrama de componentes está embutido abaixo (arquivo gerado: `documentacao/diagrama_Componente.png`).
+### Diagrama de Componentes
 
-![Diagrama de Componentes](./diagrama_Componente.png)
-
-O arquivo fonte PlantUML está em `documentacao/diagrama_Componente.puml`.
-
-Notas sobre estilo arquitetural
-- Monolito modular: frontend e backend na mesma repo, separados por contrato HTTP.
-- Camadas bem definidas facilitam testes e manutenção. A injeção manual de dependências (instâncias exportadas) fornece desacoplamento simples.
-
-Possíveis melhorias
-- Introduzir interfaces (ex.: `IUserRepository`, `IEncrypter`) para permitir mocks e testes isolados.
-- Considerar um container de injeção (IoC) para composições mais flexíveis em produção ou testes.
-
-Arquivo: `documentacao/arquitetura.md`
+![Diagrama de Componentes](Diagrama_componente.jpeg)
 
