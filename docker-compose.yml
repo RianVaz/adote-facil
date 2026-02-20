@@ -5,21 +5,22 @@ services:
     env_file:
       - ./backend/.env
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_CONTAINER_PORT: ${POSTGRES_CONTAINER_PORT}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: adote_facil
     ports:
-      - ${POSTGRES_CONTAINER_PORT}:5432
+      - "6500:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
     networks:
       - adote-facil-network
+    # Melhoria 1: Healthcheck robusto para garantir que o DB está pronto para receber queries
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 3s
-      timeout: 3s
+      test: ["CMD-SHELL", "pg_isready -U postgres -d adote_facil"]
+      interval: 5s
+      timeout: 5s
       retries: 5
+      start_period: 10s
 
   adote-facil-backend:
     build:
@@ -30,10 +31,11 @@ services:
       - "8080:8080"
     environment:
       - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:postgres@adote-facil-postgres:5432/adote_facil
+    # Melhoria 2: Sem a redundancia manual.
     depends_on:
       adote-facil-postgres:
         condition: service_healthy
-    command: sh -c "until nc -z adote-facil-postgres 5432; do echo 'Waiting for postgres...'; sleep 1; done; npm start"
     networks:
       - adote-facil-network
 
@@ -47,7 +49,8 @@ services:
     environment:
       - NODE_ENV=production
     depends_on:
-      - adote-facil-backend
+      adote-facil-backend:
+        condition: service_started
     networks:
       - adote-facil-network
 
