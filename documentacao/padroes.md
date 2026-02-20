@@ -47,7 +47,7 @@ export class BcryptHasherStrategy implements IHasherStrategy {
   // ...
 }
 
-// Estratégia concreta usando SHA-256 (exemplo adicional)
+// Estratégia concreta usando SHA-256 (exemplo)
 export class Sha256HasherStrategy implements IHasherStrategy {
   encrypt(value: string): string {
     return createHash('sha256').update(value).digest('hex');
