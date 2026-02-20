@@ -3,7 +3,6 @@ import { DefaultSelect } from '../DefaultSelect'
 import * as S from './AnimalRegisterForm.styles'
 import { animalGenderForSelect } from '@/constants/animal-gender-for-select'
 import { Plus, Trash } from '@phosphor-icons/react'
-import { useState } from 'react'
 import { z } from 'zod'
 
 import * as Dialog from '@radix-ui/react-dialog'
@@ -15,6 +14,7 @@ import { getCookie } from 'cookies-next'
 import { animalRegister } from '@/api/register-animal'
 import { AnimalTypeEnum } from '@/enums/animal-type'
 import { AnimalGenderEnum } from '@/enums/animal-gender'
+import { useAnimalImages } from '@/hooks/use-animal-images'
 
 const animalRegisterFormSchema = z.object({
   name: z.string().min(1, { message: 'O nome é obrigatório' }),
@@ -41,9 +41,6 @@ const animalRegisterFormSchema = z.object({
 export type AnimalRegisterFormData = z.infer<typeof animalRegisterFormSchema>
 
 export function AnimalRegisterForm() {
-  const [animalPictures, setAnimalPictures] = useState<File[]>([])
-  const [maxPicsWarningModalOpen, setMaxPicsWarningModalOpen] = useState(false)
-
   const {
     register,
     handleSubmit,
@@ -55,34 +52,21 @@ export function AnimalRegisterForm() {
     defaultValues: { pictures: [] },
   })
 
+  /*
+   * Modificação feita:
+   * Extraída a lógica de estado e gerenciamento de imagens para o hook customizado useAnimalImages.
+   * Isso remove a responsabilidade de "upload" e "validação visual" deste componente,
+   * permitindo que ele foque apenas na estrutura do formulário.
+   */
+  const {
+    animalPictures,
+    maxPicsWarningModalOpen,
+    setMaxPicsWarningModalOpen,
+    handleAnimalImageUpload,
+    handleRemoveAnimalPicture,
+  } = useAnimalImages(setValue)
+
   const descriptionValue = watch('description', '')
-
-  const handleAnimalImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const uploadedFiles = Array.from(e.target.files)
-
-      if (
-        uploadedFiles.length > 5 ||
-        animalPictures.length + uploadedFiles.length > 5
-      ) {
-        setMaxPicsWarningModalOpen(true)
-        return
-      }
-
-      const newPictures = [...animalPictures, ...uploadedFiles]
-      setAnimalPictures(newPictures)
-      setValue('pictures', newPictures) // Atualiza no react-hook-form
-    }
-  }
-
-  const handleRemoveAnimalPicture = (picIndex: number) => {
-    const newAnimalPictures = animalPictures.filter(
-      (pic, index) => picIndex !== index,
-    )
-
-    setAnimalPictures(newAnimalPictures)
-    setValue('pictures', newAnimalPictures) // Atualiza no react-hook-form
-  }
 
   const onSubmit = async (data: AnimalRegisterFormData) => {
     try {

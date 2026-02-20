@@ -4,6 +4,7 @@ import {
   AnimalRepository,
   animalRepositoryInstance,
 } from '../../repositories/animal.js'
+import { AnimalMapper } from '../../mappers/animal-mapper.js'
 
 export namespace GetUserAnimalsDTO {
   export type Params = {
@@ -27,14 +28,13 @@ export class GetUserAnimalsService {
 
     const animals = await this.animalRepository.findAllByUserId(userId)
 
-    const formattedAnimals = animals.map((animal) => {
-      return {
-        ...animal,
-        images: animal.images.map((image) => {
-          return image.imageData.toString('base64')
-        }),
-      }
-    })
+    /*
+     * Modificação feita:
+     * Substituído o loop manual de formatação de imagens Base64 pelo AnimalMapper.toManyDTO.
+     * Isso centraliza a regra de negócio de transformação de dados e remove duplicação
+     * entre múltiplos serviços que retornam animais com imagens.
+     */
+    const formattedAnimals = AnimalMapper.toManyDTO(animals)
 
     return Success.create({ animals: formattedAnimals })
   }
